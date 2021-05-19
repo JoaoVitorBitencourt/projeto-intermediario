@@ -2,6 +2,7 @@
   "name": "projeto-intermediario",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "./src/Principal.js",
   "scripts": {
     "start": "nodemon Principal.js"
