@@ -129,6 +129,10 @@ app.use('/Habilidades', (req, res) => {
     })
 })
 
+app.use('/', (req, res) => {
+    res.redirect('/Habilidades');
+})
+
 app.listen(PORTA, () => {
     console.log(`Rodando na porta ${PORTA}`);
 });
