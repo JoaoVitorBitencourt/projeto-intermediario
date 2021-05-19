@@ -5,7 +5,7 @@
   "type": "module",
   "main": "./src/Principal.js",
   "scripts": {
-    "start": "nodemon Principal.js"
+    "start": "node Principal.js"
   },
   "author": "Joao Vitor",
   "license": "ISC",
