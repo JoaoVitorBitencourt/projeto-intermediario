@@ -37,42 +37,67 @@ async function retornaPokemon(nome, vetor) {
 }
 
 app.use('/Pokemon', (req, res) => {
-    let ListaPokemons = geraPokemon2(),
-        queryString = req.query.pokemon,
-        vetorPokemon = [],
-        Pokemon;
-    ListaPokemons.then(resposta => {
+    let Pokemon = geraPokemon2(),
+        aux = [],
+        retorno = [];
+
+    Pokemon.then(resposta => {
+        let ListaPokemons = geraPokemon(),
+            vetorPokemon = [],
+            queryString = req.query.pokemon,
+            pokemonUrl = [];
+
         resposta.results.forEach(element => {
-            vetorPokemon.push(element);
+            pokemonUrl.push({ name: element.name, URL: element.url });
         })
-        if (queryString) {
-            Pokemon = retornaPokemon(queryString, vetorPokemon);
-            Pokemon.then(resp => {
-                res.send(resp);
+        
+
+        ListaPokemons.then(resposta => {
+            resposta.data.forEach(element => {
+                aux.push(element.name);
             })
-        } else {
-            res.send(vetorPokemon);
-        }
+
+            aux.forEach(element => {
+                pokemonUrl.forEach(element2 => {
+                    if(element2.name.toLowerCase() == element.toLowerCase()){
+                        vetorPokemon.push({name: element, url: element2.URL, date: Date.now() })
+                    }
+                })
+            })
+
+            if(queryString){
+                vetorPokemon.forEach(element => {
+                    if(element.name.toLowerCase() == queryString.toLowerCase()){
+                        retorno.push(element);
+                    }
+                })
+                res.json(retorno);
+            }else{
+                res.json(vetorPokemon);
+            }
+        })
     })
 });
 
 app.use('/Habilidades', (req, res) => {
     let Pokemon = geraPokemon(),
-        a = [],
+        aux = [],
         habilidades = [],
+        listaPokemon = [],
         retorno = [];
+
     Pokemon.then(resposta => {
         let ListaPokemons = geraPokemon2(),
-        vetorPokemon = [],
-        queryString = req.query.pokemon;
+            vetorPokemon = [],
+            queryString = req.query.pokemon;
 
         resposta.data.forEach(element => {
-            if(element.abilities){
+            if (element.abilities) {
                 element.abilities.forEach(element => {
                     habilidades.push(element.name);
                 })
             }
-            a.push({ name: element.name, abilities: habilidades });
+            aux.push({ name: element.name, abilities: habilidades });
             habilidades = []
         });
 
@@ -83,23 +108,23 @@ app.use('/Habilidades', (req, res) => {
 
             vetorPokemon.forEach(element => {
                 let nome = element.name;
-                a.forEach(element => {
-                    if(element.name.toLowerCase() == nome) {
-                        retorno.push({name: nome, abilities: element.abilities, data: Date.now()})
+                aux.forEach(element => {
+                    if (element.name.toLowerCase() == nome.toLowerCase()) {
+                        listaPokemon.push({ name: nome, abilities: element.abilities, date: Date.now() })
                     }
                 })
             })
 
             if (queryString) {
-                console.log(queryString);
-                retorno.forEach(element => {
-                    if(element.name == queryString){
-                        res.json(element);
+                listaPokemon.forEach(element => {
+                    if (element.name.toLowerCase() == queryString.toLowerCase()) {
+                        retorno.push(element)
                     }
                 })
-            } else {
                 res.json(retorno);
-            } 
+            } else {
+                res.json(listaPokemon);
+            }
         })
     })
 })
