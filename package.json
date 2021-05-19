@@ -5,7 +5,7 @@
   "type": "module",
   "main": "./src/Principal.js",
   "scripts": {
-    "start": "node Principal.js"
+    "start": "node ./src/Principal.js"
   },
   "author": "Joao Vitor",
   "license": "ISC",
